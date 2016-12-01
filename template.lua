@@ -51,7 +51,7 @@ local function template(code, args)
 	newcode = newcode:concat()
 	local f, msg = loadstring(newcode)
 	if not f then
-		print(require 'showcode'(newcode))
+		print(require 'template.showcode'(newcode))
 		error(msg)
 	end
 	
