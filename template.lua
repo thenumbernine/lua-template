@@ -1,4 +1,5 @@
 local table = require 'ext.table'
+local showcode = require 'template.showcode'
 
 --[[
 Lua template
@@ -51,14 +52,19 @@ local function template(code, args)
 	newcode = newcode:concat()
 	local f, msg = loadstring(newcode)
 	if not f then
-		print(require 'template.showcode'(newcode))
+		print(showcode(newcode))
 		error(msg)
 	end
 	
 	local outputStrs = table()
-	f(function(str)
-		outputStrs:insert(str)
-	end, argValues:unpack())
+	xpcall(function()
+		f(function(str)
+			outputStrs:insert(str)
+		end, argValues:unpack())
+	end, function(err)
+		print(showcode(newcode))
+		error(msg)
+	end)
 	return outputStrs:concat()
 end
 
