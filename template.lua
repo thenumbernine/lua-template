@@ -57,14 +57,15 @@ local function template(code, args)
 	end
 	
 	local outputStrs = table()
-	xpcall(function()
+	local result, msg = pcall(function()
 		f(function(str)
 			outputStrs:insert(str)
 		end, argValues:unpack())
-	end, function(err)
+	end)
+	if not result then
 		print(showcode(newcode))
 		error(msg)
-	end)
+	end
 	return outputStrs:concat()
 end
 
