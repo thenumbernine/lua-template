@@ -50,7 +50,7 @@ local function template(code, args)
 	end
 
 	newcode = newcode:concat()
-	local f, msg = loadstring(newcode)
+	local f, msg = load(newcode)
 	if not f then
 		print(showcode(newcode))
 		error(msg)
