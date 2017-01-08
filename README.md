@@ -1,7 +1,9 @@
 This is the template function that was in my LuaJIT-driven HydroCL project.
 I liked it so much I put it in its own project, so other projects could use it.
 
-Here's an example of how it works.  Similar to PHP.
+Here's an example of how it works.  Similar to PHP.  
+
+The <? ?>'s wrap executed code and the <?= ?> wrap automatically printed code.
 
 ``` Lua
 local template = require 'template'
