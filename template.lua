@@ -8,9 +8,11 @@ usage: template(code, {a=1, b=2, ...})
 --]]
 local function template(code, args)
 	local argKeys, argValues = table(), table()
-	for k,v in pairs(args) do
-		argKeys:insert(k)
-		argValues:insert(v)
+	if args then
+		for k,v in pairs(args) do
+			argKeys:insert(k)
+			argValues:insert(v)
+		end
 	end
 	local outputFunc = '__output'
 	local newcode = table{
