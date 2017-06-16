@@ -47,7 +47,7 @@ local function template(code, args)
 				newcode:insert(block..'\n')
 			end
 			pos = end2+1
-			if pos >= #code then break end
+			if pos > #code then break end
 		end
 	end
 
