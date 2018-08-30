@@ -27,23 +27,46 @@ template(code, env, args)
 
 usage: template(code, {a=1, b=2, ...})
 --]]
-local function template(code, args, funcArgs)
-	local argKeys, argValues = table(), table()
-	if args then
-		for k,v in pairs(args) do
-			argKeys:insert(k)
-			argValues:insert(v)
+local function template(code, env, args)
+	
+	-- setup env, let it see _G
+	local output = args and args.output or DefaultOutput()	
+	local env = table(env)	
+	setmetatable(env, {
+		__index = _G,
+	})
+	
+	-- make sure the env isn't already using the name for the output function
+	local outputFuncName = '__output'
+	if env[outputFuncName] then
+		for i=2,math.huge do
+			local trial = outputFuncName..i
+			if not env[trial] then
+				outputFuncName = trial
+				break
+			end
 		end
 	end
-	local outputFuncName = '__output'
-	local newcode = table{
-		'local '..table():append({outputFuncName},argKeys):concat', '..' = ...\n',
-	}
+	
+	-- assign output function 
+	env[outputFuncName] = output
+
+	-- generate instructions to process template
+	local newcode = table()
 	local function addprint(from,to)
 		local block = code:sub(from,to)
-		local eq = ('='):rep(5)	-- TODO make sure no such [=..=[ appears in the code block
-		local nl = block:find'\n' and '\n' or ''
-		newcode:insert(outputFuncName..' ['..eq..'['..nl..block..']'..eq..']\n')
+		
+		-- make sure no such [=..=[ appears in the code block
+		local eq, open, close
+		for i=0,math.huge do
+			eq = ('='):rep(5)
+			open = '['..eq..'['
+			close = ']'..eq..']'
+			if not (block:find(open,1,true) or block:find(close,1,true)) then break end
+		end
+		
+		local nl = block:find('\n',1,true) and '\n' or ''
+		newcode:insert(outputFuncName..' '..open..nl..block..close..'\n')
 	end
 	local pos = 1
 	while true do
@@ -71,21 +94,18 @@ local function template(code, args, funcArgs)
 			if pos > #code then break end
 		end
 	end
-
+	
+	-- generate code	
 	newcode = newcode:concat()
-	local f, msg = load(newcode)
+	local f, msg = load(newcode, nil, 'bt', env)
 	if not f then
 		error('\n'..showcode(newcode)..'\n'..msg)
 	end
-
-	local output = funcArgs and funcArgs.output or DefaultOutput()	
-	local result, msg = pcall(function()
-		f(output, argValues:unpack())
-	end)
+	local result, msg = pcall(f)
 	if not result then
 		error('\n'..showcode(newcode)..'\n'..msg)
 	end
-	return output.done and output:done() or nil
+	return type(output) == 'table' and output.done and output:done() or nil
 end
 
 return template
