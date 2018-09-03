@@ -59,7 +59,7 @@ local function template(code, env, args)
 		-- make sure no such [=..=[ appears in the code block
 		local eq, open, close
 		for i=0,math.huge do
-			eq = ('='):rep(5)
+			eq = ('='):rep(i)
 			open = '['..eq..'['
 			close = ']'..eq..']'
 			if not (block:find(open,1,true) or block:find(close,1,true)) then break end
