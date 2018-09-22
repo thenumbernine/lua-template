@@ -58,7 +58,7 @@ local function template(code, env, args)
 		
 		-- make sure no such [=..=[ appears in the code block
 		local eq, open, close
-		for i=0,math.huge do
+		for i=1,math.huge do
 			eq = ('='):rep(i)
 			open = '['..eq..'['
 			close = ']'..eq..']'
