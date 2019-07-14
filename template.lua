@@ -17,10 +17,9 @@ template(code, env, args)
 usage: template(code, {a=1, b=2, ...})
 --]]
 local function template(code, env, args)
-	
-	-- setup env, let it see _G
 	local output = args and args.output or DefaultOutput()	
-	local realenv = setmetatable({}, {
+	-- setup env, let it see _G
+	local newenv = setmetatable({}, {
 		__index = function(v,k)
 			if env then
 				local v = env[k] if v then return v end
@@ -31,10 +30,10 @@ local function template(code, env, args)
 	
 	-- make sure the env isn't already using the name for the output function
 	local outputFuncName = '__output'
-	if realenv[outputFuncName] then
+	if newenv[outputFuncName] then
 		for i=2,math.huge do
 			local trial = outputFuncName..i
-			if not realenv[trial] then
+			if not newenv[trial] then
 				outputFuncName = trial
 				break
 			end
@@ -42,7 +41,7 @@ local function template(code, env, args)
 	end
 	
 	-- assign output function 
-	realenv[outputFuncName] = output
+	newenv[outputFuncName] = output
 
 	-- generate instructions to process template
 	local newcode = table()
@@ -90,7 +89,7 @@ local function template(code, env, args)
 	
 	-- generate code	
 	newcode = newcode:concat()
-	local f, msg = load(newcode, nil, 'bt', realenv)
+	local f, msg = load(newcode, nil, 'bt', newenv)
 	if not f then
 		error('\n'..showcode(newcode)..'\n'..msg)
 	end
@@ -98,7 +97,7 @@ local function template(code, env, args)
 	if not result then
 		error('\n'..showcode(newcode)..'\n'..msg)
 	end
-	return type(output) == 'table' and output.done and output:done() or nil
+	return output:done()
 end
 
 return template
