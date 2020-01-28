@@ -7,7 +7,7 @@ The <? ?>'s wrap executed code and the <?= ?> wrap automatically printed code.
 
 ### Dependencies:
 
-- my lua-ext project: https://github.com/thenumbernine/lua-ext
+- https://github.com/thenumbernine/lua-ext
 
 ### Example:
 
