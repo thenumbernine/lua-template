@@ -1,3 +1,5 @@
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KYWUWS86GSFGL)
+
 This is the template function that was in my LuaJIT-driven HydroCL project.
 I liked it so much I put it in its own project, so other projects could use it.
 
@@ -7,7 +9,7 @@ The <? ?>'s wrap executed code and the <?= ?> wrap automatically printed code.
 
 ### Dependencies:
 
-- https://github.com/thenumbernine/lua-ext
+- [lua-ext](https://github.com/thenumbernine/lua-ext)
 
 ### Example:
 
