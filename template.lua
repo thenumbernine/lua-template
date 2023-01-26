@@ -9,7 +9,7 @@ template(code, env, args)
 	text = text to process
 	env = environment of the code in the text to use
 	args = extra args
-		output = override output function 
+		output = override output function
 			During string processing, output(str) is called on each string block 'str'.
 			Once processing is finished, the result of template() is output:done(), or nil if output has no 'done' function.
 			The default 'output' accumulates strings and returns the concatenated results.
@@ -17,17 +17,17 @@ template(code, env, args)
 usage: template(code, {a=1, b=2, ...})
 --]]
 local function template(code, env, args)
-	local output = args and args.output or DefaultOutput()	
+	local output = args and args.output or DefaultOutput()
 	-- setup env, let it see _G
 	local newenv = setmetatable({}, {
-		__index = function(v,k)
+		__index = function(t,k)
 			if env then
 				local v = env[k] if v then return v end
 			end
 			local v = _G[k] if v then return v end
 		end,
 	})
-	
+
 	-- make sure the env isn't already using the name for the output function
 	local outputFuncName = '__output'
 	if newenv[outputFuncName] then
@@ -39,15 +39,15 @@ local function template(code, env, args)
 			end
 		end
 	end
-	
-	-- assign output function 
+
+	-- assign output function
 	newenv[outputFuncName] = output
 
 	-- generate instructions to process template
 	local newcode = table()
 	local function addprint(from,to)
 		local block = code:sub(from,to)
-		
+
 		-- make sure no such [=..=[ appears in the code block
 		local eq, open, close
 		for i=1,math.huge do
@@ -56,7 +56,7 @@ local function template(code, env, args)
 			close = ']'..eq..']'
 			if not (block:find(open,1,true) or block:find(close,1,true)) then break end
 		end
-		
+
 		local nl = block:find('\n',1,true) and '\n' or ''
 		newcode:insert(outputFuncName..' '..open..nl..block..close..'\n')
 	end
@@ -68,7 +68,7 @@ local function template(code, env, args)
 			break
 		else
 			local ret
-			if code:sub(start2+1,start2+1) == '=' then 
+			if code:sub(start2+1,start2+1) == '=' then
 				ret = true
 				start2 = start2 + 1
 			end
@@ -86,14 +86,15 @@ local function template(code, env, args)
 			if pos > #code then break end
 		end
 	end
-	
-	-- generate code	
+
+	-- generate code
 	newcode = newcode:concat()
 	local f, msg = load(newcode, nil, 'bt', newenv)
 	if not f then
 		error('\n'..showcode(newcode)..'\n'..msg)
 	end
-	local result, msg = pcall(f)
+	local result
+	result, msg = pcall(f)
 	if not result then
 		error('\n'..showcode(newcode)..'\n'..msg)
 	end
