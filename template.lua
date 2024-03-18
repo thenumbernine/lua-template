@@ -91,12 +91,12 @@ local function template(code, env, args)
 	newcode = newcode:concat()
 	local f, msg = load(newcode, nil, 'bt', newenv)
 	if not f then
-		error('\n'..showcode(newcode)..'\n'..msg)
+		error('\n'..showcode(newcode)..'\n'..tostring(msg))
 	end
 	local result
 	result, msg = pcall(f)
 	if not result then
-		error('\n'..showcode(newcode)..'\n'..msg)
+		error('\n'..showcode(newcode)..'\n'..tostring(msg))
 	end
 	return output:done()
 end
