@@ -93,11 +93,11 @@ local function template(code, env, args)
 	if not f then
 		error('\n'..showcode(newcode)..'\n'..tostring(msg))
 	end
-	local result
-	result, msg = pcall(f)
-	if not result then
-		error('\n'..showcode(newcode)..'\n'..tostring(msg))
-	end
+
+	assert(xpcall(f, function(msg)
+		return '\n'..showcode(newcode)..'\n'..tostring(msg)..'\n'..debug.traceback()
+	end))
+
 	return output:done()
 end
 
