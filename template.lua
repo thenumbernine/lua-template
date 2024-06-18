@@ -91,11 +91,17 @@ local function template(code, env, args)
 	newcode = newcode:concat()
 	local f, msg = load(newcode, nil, 'bt', newenv)
 	if not f then
-		error('\n'..showcode(newcode)..'\n'..tostring(msg))
+		error('\n'
+			..showcode(newcode)..'\n'
+			..tostring(msg)
+		)
 	end
 
 	assert(xpcall(f, function(msg)
-		return '\n'..showcode(newcode)..'\n'..tostring(msg)..'\n'..debug.traceback()
+		return '\n'
+			..showcode(newcode)..'\n'
+			..tostring(msg)..'\n'
+			..debug.traceback()
 	end))
 
 	return output:done()
