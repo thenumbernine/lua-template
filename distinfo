@@ -4,7 +4,7 @@ files = {
 	["README.md"] = "template/README.md",
 	["output.lua"] = "template/output.lua",
 	["showcode.lua"] = "template/showcode.lua",
-	["template.rockspec"] = "template/template.rockspec",
+	["template-dev-1.rockspec"] = "template/template-dev-1.rockspec",
 	["template.lua"] = "template/template.lua",
 }
 deps = {
