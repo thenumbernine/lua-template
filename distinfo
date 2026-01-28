@@ -1,12 +1,18 @@
+--------------------------------------------
+-- generated with dist/build-distinfo.rua --
+--------------------------------------------
+
 name = "template"
 files = {
-	["LICENSE"] = "template/LICENSE",
-	["README.md"] = "template/README.md",
-	["output.lua"] = "template/output.lua",
-	["showcode.lua"] = "template/showcode.lua",
-	["template-dev-1.rockspec"] = "template/template-dev-1.rockspec",
-	["template.lua"] = "template/template.lua",
-	["run.lua"] = "template/run.lua",
+	"LICENSE",
+	"README.md",
+	"distinfo",
+	"output.lua",
+	"run.lua",
+	"showcode.lua",
+	"template-dev-1.rockspec",
+	"template.lua",
+	"tests/test.lua",
 }
 deps = {
 	"ext",
