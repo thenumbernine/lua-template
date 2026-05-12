@@ -3,6 +3,8 @@
 --------------------------------------------
 
 name = "template"
+git = "https://github.com/thenumbernine/lua-template"
+
 files = {
 	"LICENSE",
 	"README.md",
